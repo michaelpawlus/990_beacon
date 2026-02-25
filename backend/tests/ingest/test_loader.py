@@ -165,13 +165,11 @@ class TestLoadFiling:
         assert grants[0].amount == 100_000
         assert grants[0].purpose == "Education"
 
-    def test_sets_raw_xml_url(self, session):
+    def test_raw_xml_url_is_none(self, session):
         parsed = _make_parsed_filing()
         load_filing(session, parsed, "obj-007")
 
         filing = session.execute(
             select(Filing).where(Filing.object_id == "obj-007")
         ).scalar_one()
-        assert filing.raw_xml_url == (
-            "https://s3.amazonaws.com/irs-form-990/obj-007_public.xml"
-        )
+        assert filing.raw_xml_url is None

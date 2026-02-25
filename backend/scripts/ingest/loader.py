@@ -7,7 +7,6 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.models.organization import Filing, FilingGrant, FilingPerson, Organization
-from scripts.ingest.config import XML_URL_TEMPLATE
 from scripts.ingest.xml_parser import ParsedFiling
 
 logger = logging.getLogger(__name__)
@@ -82,7 +81,7 @@ def load_filing(session: Session, parsed: ParsedFiling, object_id: str) -> bool:
         num_employees=parsed.num_employees,
         num_volunteers=parsed.num_volunteers,
         mission_description=parsed.mission_description,
-        raw_xml_url=XML_URL_TEMPLATE.format(object_id=object_id),
+        raw_xml_url=None,
     )
     session.add(filing)
     session.flush()

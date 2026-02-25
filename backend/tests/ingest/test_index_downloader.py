@@ -5,11 +5,16 @@ from unittest.mock import MagicMock, patch
 from scripts.ingest.index_downloader import IndexEntry, download_index
 
 SAMPLE_CSV = (
-    "RETURN_ID,FILING_TYPE,EIN,TAX_PERIOD,SUB_DATE,TAXPAYER_NAME,RETURN_TYPE,DLN,OBJECT_ID\n"
-    "1001,EFILE,123456789,202212,2023-05-15,Test Org,990,12345,201900001\n"
-    "1002,EFILE,987654321,202212,2023-06-01,Another Org,990EZ,12346,201900002\n"
-    "1003,EFILE,111222333,202212,2023-07-01,Foundation Inc,990PF,12347,201900003\n"
-    "1004,EFILE,444555666,202212,2023-08-01,Bad Type,990T,12348,201900004\n"
+    "RETURN_ID,FILING_TYPE,EIN,TAX_PERIOD,SUB_DATE,"
+    "TAXPAYER_NAME,RETURN_TYPE,DLN,OBJECT_ID,XML_BATCH_ID\n"
+    "1001,EFILE,123456789,202212,2023-05-15,"
+    "Test Org,990,12345,201900001,2023_TEOS_XML_01A\n"
+    "1002,EFILE,987654321,202212,2023-06-01,"
+    "Another Org,990EZ,12346,201900002,2023_TEOS_XML_01A\n"
+    "1003,EFILE,111222333,202212,2023-07-01,"
+    "Foundation Inc,990PF,12347,201900003,2023_TEOS_XML_02A\n"
+    "1004,EFILE,444555666,202212,2023-08-01,"
+    "Bad Type,990T,12348,201900004,2023_TEOS_XML_02A\n"
 )
 
 
@@ -54,6 +59,7 @@ class TestDownloadIndex:
         assert entry.return_type == "990"
         assert entry.tax_period == "202212"
         assert entry.sub_date == "2023-05-15"
+        assert entry.xml_batch_id == "2023_TEOS_XML_01A"
 
     @patch("scripts.ingest.index_downloader.requests.get")
     def test_http_error_returns_empty(self, mock_get):
@@ -82,7 +88,6 @@ class TestDownloadIndex:
 
         download_index(2023)
 
-        mock_get.assert_called_once_with(
-            "https://s3.amazonaws.com/irs-form-990/index_2023.csv",
-            timeout=120,
-        )
+        call_url = mock_get.call_args[0][0]
+        assert "index_2023.csv" in call_url
+        assert "apps.irs.gov" in call_url

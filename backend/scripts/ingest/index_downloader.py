@@ -20,6 +20,7 @@ class IndexEntry:
     return_type: str
     tax_period: str
     sub_date: str
+    xml_batch_id: str
 
 
 def download_index(year: int) -> list[IndexEntry]:
@@ -53,6 +54,7 @@ def download_index(year: int) -> list[IndexEntry]:
                 return_type=return_type,
                 tax_period=row.get("TAX_PERIOD", ""),
                 sub_date=row.get("SUB_DATE", ""),
+                xml_batch_id=row.get("XML_BATCH_ID", ""),
             )
         )
 
