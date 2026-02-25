@@ -1,4 +1,4 @@
-.PHONY: setup dev dev-backend dev-frontend test test-backend test-frontend lint migrate migration seed clean
+.PHONY: setup dev dev-backend dev-frontend test test-backend test-frontend lint migrate migration seed ingest-historical ingest-weekly clean
 
 setup:
 	docker compose up -d
@@ -38,6 +38,12 @@ migration:
 
 seed:
 	cd backend && uv run python scripts/seed.py
+
+ingest-historical:
+	cd backend && uv run python -m scripts.ingest.pipeline --mode historical --limit 100000
+
+ingest-weekly:
+	cd backend && uv run python -m scripts.ingest.pipeline --mode incremental
 
 clean:
 	docker compose down -v

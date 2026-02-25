@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Return xmlns="http://www.irs.gov/efile" returnVersion="2012v3.0">
+  <ReturnHeader>
+    <ReturnType>990</ReturnType>
+    <TaxYear>2012</TaxYear>
+    <Filer>
+      <EIN>987654321</EIN>
+      <BusinessName>
+        <BusinessNameLine1>Pre-2014 Test Org</BusinessNameLine1>
+      </BusinessName>
+      <USAddress>
+        <City>Chicago</City>
+        <State>IL</State>
+      </USAddress>
+    </Filer>
+  </ReturnHeader>
+  <ReturnData>
+    <IRS990>
+      <TotalRevenueCurrentYear>3000000</TotalRevenueCurrentYear>
+      <TotalExpensesCurrentYear>2800000</TotalExpensesCurrentYear>
+      <NetAssetsOrFundBalancesBOY>1500000</NetAssetsOrFundBalancesBOY>
+      <ContributionsGrantsCurrentYear>2000000</ContributionsGrantsCurrentYear>
+      <ProgramServiceRevenueCY>800000</ProgramServiceRevenueCY>
+      <InvestmentIncomeCurrentYear>200000</InvestmentIncomeCurrentYear>
+      <TotalProgramServiceExpense>2200000</TotalProgramServiceExpense>
+      <ManagementAndGeneralAmt>400000</ManagementAndGeneralAmt>
+      <TotalFundraisingExpense>200000</TotalFundraisingExpense>
+      <TotalNbrEmployees>75</TotalNbrEmployees>
+      <TotalNbrVolunteers>200</TotalNbrVolunteers>
+      <ActivityOrMissionDescription>Supporting health research and community wellness.</ActivityOrMissionDescription>
+      <Form990PartVIISectionA>
+        <PersonNm>Alice Johnson</PersonNm>
+        <Title>CEO</Title>
+        <Compensation>180000</Compensation>
+        <Officer>X</Officer>
+        <IndividualTrusteeOrDirector>0</IndividualTrusteeOrDirector>
+        <KeyEmployee>0</KeyEmployee>
+        <HighestCompensatedEmployee>0</HighestCompensatedEmployee>
+      </Form990PartVIISectionA>
+    </IRS990>
+  </ReturnData>
+</Return>

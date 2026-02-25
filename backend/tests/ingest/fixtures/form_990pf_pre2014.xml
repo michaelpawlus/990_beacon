@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Return xmlns="http://www.irs.gov/efile" returnVersion="2012v3.0">
+  <ReturnHeader>
+    <ReturnType>990PF</ReturnType>
+    <TaxYear>2012</TaxYear>
+    <Filer>
+      <EIN>888999000</EIN>
+      <BusinessName>
+        <BusinessNameLine1>Old Foundation PF</BusinessNameLine1>
+      </BusinessName>
+      <USAddress>
+        <City>Seattle</City>
+        <State>WA</State>
+      </USAddress>
+    </Filer>
+  </ReturnHeader>
+  <ReturnData>
+    <IRS990PF>
+      <AnalysisOfRevenueAndExpenses>
+        <TotalRevAndExpnssAmt>7000000</TotalRevAndExpnssAmt>
+        <TotalExpensesRevAndExpnssAmt>5000000</TotalExpensesRevAndExpnssAmt>
+        <ContriRcvdRevAndExpnssAmt>300000</ContriRcvdRevAndExpnssAmt>
+        <InvstIncmRevAndExpnssAmt>6700000</InvstIncmRevAndExpnssAmt>
+      </AnalysisOfRevenueAndExpenses>
+      <TotalNetAssetsFundBalances><EOY>40000000</EOY></TotalNetAssetsFundBalances>
+      <SupplementaryInformation>
+        <GrantOrContributionPdDurYr>
+          <RecipientBusinessName><BusinessNameLine1>Youth Arts Program</BusinessNameLine1></RecipientBusinessName>
+          <RecipientUSAddress>
+            <City>Seattle</City>
+            <State>WA</State>
+          </RecipientUSAddress>
+          <Amount>75000</Amount>
+          <PurposeOfGrantOrContribution>Arts education for underserved youth</PurposeOfGrantOrContribution>
+        </GrantOrContributionPdDurYr>
+      </SupplementaryInformation>
+    </IRS990PF>
+  </ReturnData>
+</Return>

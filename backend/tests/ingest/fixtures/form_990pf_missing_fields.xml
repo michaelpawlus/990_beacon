@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Return xmlns="http://www.irs.gov/efile" returnVersion="2022v5.0">
+  <ReturnHeader>
+    <ReturnTypeCd>990PF</ReturnTypeCd>
+    <TaxYr>2022</TaxYr>
+    <Filer>
+      <EIN>999000111</EIN>
+      <BusinessName>
+        <BusinessNameLine1Txt>Minimal Foundation</BusinessNameLine1Txt>
+      </BusinessName>
+      <USAddress>
+        <CityNm>Miami</CityNm>
+        <StateAbbreviationCd>FL</StateAbbreviationCd>
+      </USAddress>
+    </Filer>
+  </ReturnHeader>
+  <ReturnData>
+    <IRS990PF>
+      <TotalRevAndExpnssAmt>2000000</TotalRevAndExpnssAmt>
+    </IRS990PF>
+  </ReturnData>
+</Return>

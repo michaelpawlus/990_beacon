@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Return xmlns="http://www.irs.gov/efile" returnVersion="2022v5.0">
+  <ReturnHeader>
+    <ReturnTypeCd>990</ReturnTypeCd>
+    <TaxYr>2022</TaxYr>
+    <Filer>
+      <EIN>123456789</EIN>
+      <BusinessName>
+        <BusinessNameLine1Txt>Test Organization 990</BusinessNameLine1Txt>
+      </BusinessName>
+      <USAddress>
+        <CityNm>New York</CityNm>
+        <StateAbbreviationCd>NY</StateAbbreviationCd>
+      </USAddress>
+    </Filer>
+  </ReturnHeader>
+  <ReturnData>
+    <IRS990>
+      <CYTotalRevenueAmt>5000000</CYTotalRevenueAmt>
+      <CYTotalExpensesAmt>4500000</CYTotalExpensesAmt>
+      <NetAssetsOrFundBalancesEOYAmt>2000000</NetAssetsOrFundBalancesEOYAmt>
+      <CYContributionsGrantsAmt>3000000</CYContributionsGrantsAmt>
+      <CYProgramServiceRevenueAmt>1500000</CYProgramServiceRevenueAmt>
+      <CYInvestmentIncomeAmt>500000</CYInvestmentIncomeAmt>
+      <CYTotalProgramServiceExpenseAmt>3500000</CYTotalProgramServiceExpenseAmt>
+      <CYManagementAndGeneralAmt>700000</CYManagementAndGeneralAmt>
+      <CYTotalFundraisingExpenseAmt>300000</CYTotalFundraisingExpenseAmt>
+      <TotalEmployeeCnt>150</TotalEmployeeCnt>
+      <TotalVolunteersCnt>500</TotalVolunteersCnt>
+      <ActivityOrMissionDesc>Helping communities thrive through education and outreach.</ActivityOrMissionDesc>
+      <Form990PartVIISectionAGrp>
+        <PersonNm>Jane Smith</PersonNm>
+        <TitleTxt>Executive Director</TitleTxt>
+        <ReportableCompFromOrgAmt>250000</ReportableCompFromOrgAmt>
+        <OfficerInd>X</OfficerInd>
+        <IndividualTrusteeOrDirectorInd>0</IndividualTrusteeOrDirectorInd>
+        <KeyEmployeeInd>0</KeyEmployeeInd>
+        <HighestCompensatedEmployeeInd>0</HighestCompensatedEmployeeInd>
+      </Form990PartVIISectionAGrp>
+      <Form990PartVIISectionAGrp>
+        <PersonNm>John Doe</PersonNm>
+        <TitleTxt>Board Chair</TitleTxt>
+        <ReportableCompFromOrgAmt>0</ReportableCompFromOrgAmt>
+        <OfficerInd>0</OfficerInd>
+        <IndividualTrusteeOrDirectorInd>X</IndividualTrusteeOrDirectorInd>
+        <KeyEmployeeInd>0</KeyEmployeeInd>
+        <HighestCompensatedEmployeeInd>0</HighestCompensatedEmployeeInd>
+      </Form990PartVIISectionAGrp>
+    </IRS990>
+  </ReturnData>
+</Return>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Return xmlns="http://www.irs.gov/efile" returnVersion="2022v5.0">
+  <ReturnHeader>
+    <ReturnTypeCd>990EZ</ReturnTypeCd>
+    <TaxYr>2022</TaxYr>
+    <Filer>
+      <EIN>444555666</EIN>
+      <BusinessName>
+        <BusinessNameLine1Txt>Small Charity EZ</BusinessNameLine1Txt>
+      </BusinessName>
+      <USAddress>
+        <CityNm>Austin</CityNm>
+        <StateAbbreviationCd>TX</StateAbbreviationCd>
+      </USAddress>
+    </Filer>
+  </ReturnHeader>
+  <ReturnData>
+    <IRS990EZ>
+      <TotalRevenueAmt>150000</TotalRevenueAmt>
+      <TotalExpensesAmt>140000</TotalExpensesAmt>
+      <NetAssetsOrFundBalancesEOYAmt>50000</NetAssetsOrFundBalancesEOYAmt>
+      <ContributionsGiftsGrantsEtcAmt>120000</ContributionsGiftsGrantsEtcAmt>
+      <ProgramServiceRevenueAmt>20000</ProgramServiceRevenueAmt>
+      <InvestmentIncomeAmt>10000</InvestmentIncomeAmt>
+    </IRS990EZ>
+  </ReturnData>
+</Return>

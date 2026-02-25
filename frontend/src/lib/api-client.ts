@@ -1,3 +1,12 @@
+import type {
+  OrganizationSearchResult,
+  PaginatedResults,
+  TypeaheadResult,
+  OrganizationProfile,
+  SearchFilters,
+  UsageSummary,
+} from "@/lib/types";
+
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -47,5 +56,23 @@ export function createApiClient(token?: string) {
     getMe: () => request<ApiUser>("/api/v1/me"),
     getHealth: () =>
       request<{ status: string; db: string; version: string }>("/health"),
+    searchOrganizations: (filters: SearchFilters) => {
+      const params = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          params.set(key, String(value));
+        }
+      });
+      return request<PaginatedResults<OrganizationSearchResult>>(
+        `/api/v1/search?${params.toString()}`
+      );
+    },
+    typeahead: (q: string) =>
+      request<TypeaheadResult[]>(
+        `/api/v1/search/typeahead?q=${encodeURIComponent(q)}`
+      ),
+    getOrganization: (id: string) =>
+      request<OrganizationProfile>(`/api/v1/organizations/${id}`),
+    getUsageSummary: () => request<UsageSummary>("/api/v1/usage/summary"),
   };
 }

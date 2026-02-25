@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Return xmlns="http://www.irs.gov/efile" returnVersion="2022v5.0">
+  <ReturnHeader>
+    <ReturnTypeCd>990PF</ReturnTypeCd>
+    <TaxYr>2022</TaxYr>
+    <Filer>
+      <EIN>777888999</EIN>
+      <BusinessName>
+        <BusinessNameLine1Txt>Test Foundation PF</BusinessNameLine1Txt>
+      </BusinessName>
+      <USAddress>
+        <CityNm>San Francisco</CityNm>
+        <StateAbbreviationCd>CA</StateAbbreviationCd>
+      </USAddress>
+    </Filer>
+  </ReturnHeader>
+  <ReturnData>
+    <IRS990PF>
+      <TotalRevAndExpnssAmt>10000000</TotalRevAndExpnssAmt>
+      <TotalExpensesRevAndExpnssAmt>8000000</TotalExpensesRevAndExpnssAmt>
+      <TotNetAstOrFundBalancesEOYAmt>50000000</TotNetAstOrFundBalancesEOYAmt>
+      <ContriRcvdRevAndExpnssAmt>500000</ContriRcvdRevAndExpnssAmt>
+      <InvstIncmRevAndExpnssAmt>9500000</InvstIncmRevAndExpnssAmt>
+      <SupplementaryInformationGrp>
+        <GrantOrContributionPdDurYrGrp>
+          <RecipientPersonNm>Local School District</RecipientPersonNm>
+          <RecipientUSAddress>
+            <CityNm>San Francisco</CityNm>
+            <StateAbbreviationCd>CA</StateAbbreviationCd>
+          </RecipientUSAddress>
+          <Amt>250000</Amt>
+          <GrantOrContributionPurposeTxt>Support STEM education programs</GrantOrContributionPurposeTxt>
+        </GrantOrContributionPdDurYrGrp>
+        <GrantOrContributionPdDurYrGrp>
+          <RecipientPersonNm>Community Health Center</RecipientPersonNm>
+          <RecipientUSAddress>
+            <CityNm>Oakland</CityNm>
+            <StateAbbreviationCd>CA</StateAbbreviationCd>
+          </RecipientUSAddress>
+          <Amt>100000</Amt>
+          <GrantOrContributionPurposeTxt>Fund mobile health clinics</GrantOrContributionPurposeTxt>
+        </GrantOrContributionPdDurYrGrp>
+      </SupplementaryInformationGrp>
+    </IRS990PF>
+  </ReturnData>
+</Return>

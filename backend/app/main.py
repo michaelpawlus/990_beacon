@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import health, users, webhooks
+from app.api import health, organizations, search, usage, users, webhooks
 from app.core.config import settings
 from app.core.database import engine
 
@@ -36,6 +36,9 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(users.router)
     app.include_router(webhooks.router)
+    app.include_router(search.router)
+    app.include_router(organizations.router)
+    app.include_router(usage.router)
 
     @app.exception_handler(Exception)
     async def global_exception_handler(request: Request, exc: Exception):
