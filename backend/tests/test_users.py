@@ -1,6 +1,5 @@
 """User endpoint tests."""
 
-import jwt
 import pytest
 from httpx import ASGITransport, AsyncClient
 
@@ -12,23 +11,18 @@ def anyio_backend():
     return "asyncio"
 
 
-def make_token(clerk_id: str = "user_test123") -> str:
-    """Create a test JWT token."""
-    return jwt.encode({"sub": clerk_id}, "test-secret", algorithm="HS256")
-
-
 @pytest.mark.asyncio
-async def test_me_without_auth_returns_401():
+async def test_me_without_auth_returns_403():
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as client:
         response = await client.get("/api/v1/me")
 
-    assert response.status_code == 401
+    assert response.status_code == 403
 
 
 @pytest.mark.asyncio
-async def test_me_with_invalid_token_returns_401():
+async def test_me_with_invalid_token_returns_403():
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as client:
@@ -37,19 +31,39 @@ async def test_me_with_invalid_token_returns_401():
             headers={"Authorization": "Bearer not-a-valid-jwt"},
         )
 
-    assert response.status_code == 401
+    assert response.status_code == 403
 
 
 @pytest.mark.asyncio
-async def test_me_with_unknown_clerk_id_returns_401():
-    """Token is valid JWT but clerk_id not in DB."""
-    token = make_token("user_nonexistent")
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
-        response = await client.get(
-            "/api/v1/me",
-            headers={"Authorization": f"Bearer {token}"},
+async def test_me_with_unknown_clerk_id_returns_401(db, test_engine):
+    """Token passes auth guard but clerk_id not in DB."""
+    from fastapi_clerk_auth import HTTPAuthorizationCredentials
+
+    from app.core.database import get_db
+    from app.core.deps import clerk_auth_guard
+
+    async def override_guard():
+        return HTTPAuthorizationCredentials(
+            scheme="Bearer",
+            credentials="fake-token",
+            decoded={"sub": "user_nonexistent"},
         )
 
-    assert response.status_code == 401
+    async def override_get_db():
+        yield db
+
+    app.dependency_overrides[clerk_auth_guard] = override_guard
+    app.dependency_overrides[get_db] = override_get_db
+
+    try:
+        async with AsyncClient(
+            transport=ASGITransport(app=app), base_url="http://test"
+        ) as client:
+            response = await client.get(
+                "/api/v1/me",
+                headers={"Authorization": "Bearer fake-token"},
+            )
+
+        assert response.status_code == 401
+    finally:
+        app.dependency_overrides.clear()

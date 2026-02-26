@@ -2,7 +2,6 @@
 
 import uuid
 
-import jwt
 import pytest
 from httpx import ASGITransport, AsyncClient
 
@@ -14,20 +13,23 @@ from tests.factories import create_test_filing, create_test_org, create_test_use
 async def auth_client_with_user(db, test_engine):
     """Create an authenticated test client with unique user per test."""
     from app.core.database import get_db
+    from app.core.deps import get_current_user
 
     unique_id = uuid.uuid4().hex[:8]
     user = await create_test_user(db, clerk_id=f"usage_{unique_id}")
-    token = jwt.encode({"sub": user.clerk_id}, "secret", algorithm="HS256")
 
     async def override_get_db():
         yield db
 
+    async def override_auth():
+        return user
+
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_auth
 
     async with AsyncClient(
         transport=ASGITransport(app=app),
         base_url="http://test",
-        headers={"Authorization": f"Bearer {token}"},
     ) as client:
         yield client, user
 
@@ -95,6 +97,7 @@ class TestUsageTracking:
     async def test_usage_summary_filters_by_user(self, db, test_engine):
         """Usage summary only shows current user's events."""
         from app.core.database import get_db
+        from app.core.deps import get_current_user
 
         uid1 = uuid.uuid4().hex[:8]
         uid2 = uuid.uuid4().hex[:8]
@@ -110,23 +113,28 @@ class TestUsageTracking:
         async def override_get_db():
             yield db
 
-        app.dependency_overrides[get_db] = override_get_db
-
         # User 1 does a search
-        token1 = jwt.encode({"sub": user1.clerk_id}, "secret", algorithm="HS256")
+        async def override_auth_user1():
+            return user1
+
+        app.dependency_overrides[get_db] = override_get_db
+        app.dependency_overrides[get_current_user] = override_auth_user1
+
         async with AsyncClient(
             transport=ASGITransport(app=app),
             base_url="http://test",
-            headers={"Authorization": f"Bearer {token1}"},
         ) as client1:
             await client1.get("/api/v1/search", params={"q": "Filter"})
 
         # User 2 checks their summary - should be 0
-        token2 = jwt.encode({"sub": user2.clerk_id}, "secret", algorithm="HS256")
+        async def override_auth_user2():
+            return user2
+
+        app.dependency_overrides[get_current_user] = override_auth_user2
+
         async with AsyncClient(
             transport=ASGITransport(app=app),
             base_url="http://test",
-            headers={"Authorization": f"Bearer {token2}"},
         ) as client2:
             summary_resp = await client2.get("/api/v1/usage/summary")
             assert summary_resp.status_code == 200
@@ -138,4 +146,4 @@ class TestUsageTracking:
     async def test_usage_summary_requires_auth(self, unauth_client):
         """Usage summary endpoint requires authentication."""
         response = await unauth_client.get("/api/v1/usage/summary")
-        assert response.status_code == 401
+        assert response.status_code == 403

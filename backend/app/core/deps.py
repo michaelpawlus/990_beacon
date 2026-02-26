@@ -1,43 +1,27 @@
-from fastapi import Depends, HTTPException, Request, status
+from fastapi import Depends, HTTPException, status
+from fastapi_clerk_auth import (
+    ClerkConfig,
+    ClerkHTTPBearer,
+    HTTPAuthorizationCredentials,
+)
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import settings
 from app.core.database import get_db
 from app.models.user import User
 
+clerk_config = ClerkConfig(jwks_url=settings.CLERK_JWKS_URL)
+clerk_auth_guard = ClerkHTTPBearer(config=clerk_config)
+clerk_auth_guard_optional = ClerkHTTPBearer(config=clerk_config, auto_error=False)
+
 
 async def get_current_user(
-    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(clerk_auth_guard),
     db: AsyncSession = Depends(get_db),
 ) -> User:
-    """Extract Clerk user ID from JWT and look up User in DB."""
-    auth_header = request.headers.get("authorization", "")
-    if not auth_header.startswith("Bearer "):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Missing or invalid authorization header",
-        )
-
-    token = auth_header.removeprefix("Bearer ")
-    if not token:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Missing token",
-        )
-
-    # Decode Clerk JWT to get subject (clerk_id)
-    # In production, use fastapi-clerk-auth or verify with Clerk's JWKS
-    # For now, we decode without verification in dev mode
-    import jwt
-
-    try:
-        payload = jwt.decode(token, options={"verify_signature": False})
-        clerk_id = payload.get("sub")
-    except jwt.PyJWTError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token",
-        ) from exc
+    """Extract Clerk user ID from verified JWT and look up User in DB."""
+    clerk_id = credentials.decoded.get("sub")
 
     if not clerk_id:
         raise HTTPException(
@@ -58,11 +42,18 @@ async def get_current_user(
 
 
 async def get_optional_user(
-    request: Request,
+    credentials: HTTPAuthorizationCredentials | None = Depends(
+        clerk_auth_guard_optional
+    ),
     db: AsyncSession = Depends(get_db),
 ) -> User | None:
     """Like get_current_user but returns None for unauthenticated requests."""
-    try:
-        return await get_current_user(request, db)
-    except HTTPException:
+    if credentials is None:
         return None
+
+    clerk_id = credentials.decoded.get("sub")
+    if not clerk_id:
+        return None
+
+    result = await db.execute(select(User).where(User.clerk_id == clerk_id))
+    return result.scalar_one_or_none()

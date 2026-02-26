@@ -1,4 +1,3 @@
-import jwt
 import pytest
 from httpx import ASGITransport, AsyncClient
 
@@ -10,19 +9,22 @@ from tests.factories import create_test_filing, create_test_org, create_test_use
 async def auth_client(db, test_engine):
     """Create an authenticated test client."""
     from app.core.database import get_db
+    from app.core.deps import get_current_user
 
     user = await create_test_user(db, clerk_id="test_search_user")
-    token = jwt.encode({"sub": user.clerk_id}, "secret", algorithm="HS256")
 
     async def override_get_db():
         yield db
 
+    async def override_auth():
+        return user
+
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_auth
 
     async with AsyncClient(
         transport=ASGITransport(app=app),
         base_url="http://test",
-        headers={"Authorization": f"Bearer {token}"},
     ) as client:
         yield client
 
@@ -52,7 +54,7 @@ class TestSearchEndpoint:
     @pytest.mark.asyncio
     async def test_search_requires_auth(self, unauth_client):
         response = await unauth_client.get("/api/v1/search")
-        assert response.status_code == 401
+        assert response.status_code == 403
 
     @pytest.mark.asyncio
     async def test_search_by_name(self, auth_client, db):
@@ -166,7 +168,7 @@ class TestTypeaheadEndpoint:
         response = await unauth_client.get(
             "/api/v1/search/typeahead", params={"q": "test"}
         )
-        assert response.status_code == 401
+        assert response.status_code == 403
 
     @pytest.mark.asyncio
     async def test_typeahead_returns_matches(self, auth_client, db):

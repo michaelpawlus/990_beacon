@@ -1,6 +1,7 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
+import sentry_sdk
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -8,6 +9,14 @@ from fastapi.responses import JSONResponse
 from app.api import health, organizations, search, usage, users, webhooks
 from app.core.config import settings
 from app.core.database import engine
+
+if settings.SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=settings.SENTRY_DSN,
+        environment=settings.ENVIRONMENT,
+        send_default_pii=True,
+        traces_sample_rate=1.0 if settings.ENVIRONMENT == "development" else 0.1,
+    )
 
 
 @asynccontextmanager

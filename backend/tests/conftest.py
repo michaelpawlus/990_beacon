@@ -4,6 +4,7 @@ import os
 # The .env file sets a placeholder webhook secret which causes
 # tests to fail on signature verification.
 os.environ["CLERK_WEBHOOK_SECRET"] = ""
+os.environ["CLERK_JWKS_URL"] = ""
 
 import pytest  # noqa: E402
 from sqlalchemy import text  # noqa: E402

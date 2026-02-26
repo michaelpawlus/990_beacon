@@ -16,7 +16,9 @@ dependencies = [
     "fastapi-clerk-auth>=0.0.9",
     "lxml>=5.0.0",
     "defusedxml>=0.7.0",
+    "redis[hiredis]>=5.0.0",
     "requests>=2.32.0",
+    "sentry-sdk[fastapi]>=2.0.0",
 ]
 
 [project.optional-dependencies]

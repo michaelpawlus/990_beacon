@@ -1,6 +1,5 @@
 import uuid
 
-import jwt
 import pytest
 from httpx import ASGITransport, AsyncClient
 
@@ -17,19 +16,22 @@ from tests.factories import (
 @pytest.fixture
 async def auth_client(db, test_engine):
     from app.core.database import get_db
+    from app.core.deps import get_current_user
 
     user = await create_test_user(db, clerk_id="test_org_user")
-    token = jwt.encode({"sub": user.clerk_id}, "secret", algorithm="HS256")
 
     async def override_get_db():
         yield db
 
+    async def override_auth():
+        return user
+
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_auth
 
     async with AsyncClient(
         transport=ASGITransport(app=app),
         base_url="http://test",
-        headers={"Authorization": f"Bearer {token}"},
     ) as client:
         yield client
 
@@ -142,7 +144,7 @@ class TestOrganizationProfile:
         org = await create_test_org(db, ein="111222333")
         await db.flush()
         response = await unauth_client.get(f"/api/v1/organizations/{org.id}")
-        assert response.status_code == 401
+        assert response.status_code == 403
 
     @pytest.mark.asyncio
     async def test_organization_metrics(self, auth_client, db):
