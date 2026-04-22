@@ -52,3 +52,28 @@ make test         # Run all tests
 make lint         # Lint frontend + backend
 make migrate      # Run Alembic migrations
 ```
+
+## `beacon` CLI
+
+An agent-facing wrapper over the FastAPI backend. Installed as a console script
+from `backend/` (`pipx install -e backend` or `uv pip install -e backend`).
+
+**Environment:**
+
+- `BEACON_API_URL` — backend base URL (default `http://localhost:8000`)
+- `BEACON_API_TOKEN` — Clerk JWT, copied from the signed-in web app (devtools
+  → Network → any authed request → `Authorization: Bearer ...`)
+
+Global flags: `--base-url`, `--token`, `--timeout`. Every read command accepts
+`--json` (JSON to stdout; human text to stderr otherwise). Exit codes: `0`
+success, `1` error (auth / network / server), `2` not found.
+
+| Command | Example |
+|---|---|
+| `beacon health` | `beacon health --json` |
+| `beacon whoami` | `beacon whoami --json` (auth smoke test) |
+| `beacon search QUERY` | `beacon search "food bank" --state OH --json \| jq '.total'` |
+| `beacon typeahead QUERY` | `beacon typeahead "typ" --json` (min length 2) |
+| `beacon org ein EIN` | `beacon org ein 310123456 --json` |
+| `beacon org show ORG_ID` | `beacon org show <uuid> --json` |
+| `beacon usage` | `beacon usage --json` |
