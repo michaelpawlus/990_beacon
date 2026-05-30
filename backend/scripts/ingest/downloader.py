@@ -10,7 +10,7 @@ import tempfile
 import time
 import zipfile
 from collections.abc import Generator
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 
 import requests
 
@@ -136,8 +136,6 @@ def open_zip_batch(
 
         yield _xml_entries()
     finally:
-        try:
+        with suppress(OSError):
             os.unlink(tmp_path)
-        except OSError:
-            pass
         gc.collect()
