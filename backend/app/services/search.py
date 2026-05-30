@@ -1,5 +1,6 @@
 from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql.elements import ColumnElement
 
 from app.models.organization import Filing, Organization
 from app.schemas.organization import (
@@ -52,7 +53,7 @@ async def search_organizations(
     )
 
     # Build filter conditions
-    conditions = []
+    conditions: list[ColumnElement[bool]] = []
     if filters.q:
         conditions.append(Organization.name.op("%")(filters.q))
     if filters.state:
