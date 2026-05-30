@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.scripts]
-beacon = "app.cli:app"
+b990 = "app.cli:app"
 
 [build-system]
 requires = ["hatchling"]
