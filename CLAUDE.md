@@ -53,7 +53,7 @@ make lint         # Lint frontend + backend
 make migrate      # Run Alembic migrations
 ```
 
-## `beacon` CLI
+## `b990` CLI
 
 An agent-facing wrapper over the FastAPI backend. Installed as a console script
 from `backend/` (`pipx install -e backend` or `uv pip install -e backend`).
@@ -70,10 +70,10 @@ success, `1` error (auth / network / server), `2` not found.
 
 | Command | Example |
 |---|---|
-| `beacon health` | `beacon health --json` |
-| `beacon whoami` | `beacon whoami --json` (auth smoke test) |
-| `beacon search QUERY` | `beacon search "food bank" --state OH --json \| jq '.total'` |
-| `beacon typeahead QUERY` | `beacon typeahead "typ" --json` (min length 2) |
-| `beacon org ein EIN` | `beacon org ein 310123456 --json` |
-| `beacon org show ORG_ID` | `beacon org show <uuid> --json` |
-| `beacon usage` | `beacon usage --json` |
+| `b990 health` | `b990 health --json` |
+| `b990 whoami` | `b990 whoami --json` (auth smoke test) |
+| `b990 search QUERY` | `b990 search "food bank" --state OH --json \| jq '.total'` |
+| `b990 typeahead QUERY` | `b990 typeahead "typ" --json` (min length 2) |
+| `b990 org ein EIN` | `b990 org ein 310123456 --json` |
+| `b990 org show ORG_ID` | `b990 org show <uuid> --json` |
+| `b990 usage` | `b990 usage --json` |
